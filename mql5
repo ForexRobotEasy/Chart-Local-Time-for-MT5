@@ -1,0 +1,54 @@
+
+//+------------------------------------------------------------------+
+//|                                                  Chart Local Time |
+//|                                     https://forexroboteasy.com     |
+//|                                                         Forex Robot Easy Team    |
+//+------------------------------------------------------------------+
+
+//+------------------------------------------------------------------+
+//| Custom indicator initialization function                         |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+   //--- indicator buffers mapping
+   SetIndexBuffer(0, TimeBuffer);
+
+   //--- set up parameters
+   IndicatorShortName('Chart Local Time');
+
+   //--- return value of initialization
+   return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Custom indicator deinitialization function                       |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+   //--- clear buffers
+   ArrayInitialize(TimeBuffer, 0.0);
+}
+
+//+------------------------------------------------------------------+
+//| Custom indicator iteration function                              |
+//+------------------------------------------------------------------+
+int OnCalculate(const int rates_total,
+                const int prev_calculated,
+                const datetime &time[],
+                const double &open[],
+                const double &high[],
+                const double &low[],
+                const double &close[],
+                const long &tick_volume[],
+                const long &volume[],
+                const int &spread[])
+{
+   //--- display local time on chart
+   for(int i = prev_calculated; i < rates_total && !IsStopped(); i++)
+   {
+      TimeBuffer[i] = TimeLocal(time[i]);
+      Print('Local Time: ', TimeToString(TimeBuffer[i], TIME_DATE|TIME_MINUTES));
+   }
+
+   return(rates_total);
+}
